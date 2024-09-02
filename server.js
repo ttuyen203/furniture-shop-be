@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
+import categoryRoute from "./src/routes/categoryRoute.js";
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use(categoryRoute);
 
 app.use(cors());
 

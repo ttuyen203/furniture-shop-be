@@ -14,9 +14,9 @@ app.use(
 
 app.use(express.json());
 
-app.use(categoryRoute);
-
 app.use(cors());
+
+app.use(categoryRoute);
 
 dotenv.config();
 

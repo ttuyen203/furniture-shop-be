@@ -53,18 +53,21 @@ class CategoryController {
   async updateCategory(req, res) {
     try {
       const slug = slugify(req.body.name, { lower: true, strict: true });
-      const category = await Category.findByIdAndUpdate(
-        req.params.id,
-        { ...req.body, slug },
-        { new: true }
+
+      const category = await Category.findOneAndUpdate(
+        { slug: req.params.slug }, 
+        { ...req.body, slug }, 
+        { new: true } 
       );
+
       if (!category) {
         return res.status(404).json({
           message: "Category not found",
         });
       }
+
       return res.status(200).json({
-        message: "Category updated done",
+        message: "Category updated successfully",
         data: category,
       });
     } catch (error) {

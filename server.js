@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import categoryRoute from "./src/routes/categoryRoute.js";
+import productRoute from "./src/routes/productRoute.js";
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use(categoryRoute);
+
+app.use(productRoute);
 
 dotenv.config();
 

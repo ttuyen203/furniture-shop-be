@@ -6,12 +6,12 @@ class CategoryController {
     try {
       const categories = await Category.find({});
       return res.status(200).json({
-        message: "Get all category",
+        message: "Get all categories",
         data: categories,
       });
     } catch (error) {
       return res.status(500).json({
-        message: "Get all category failed",
+        message: "Get all categories failed",
         error: error.message,
       });
     }
@@ -37,9 +37,19 @@ class CategoryController {
 
   async createCategory(req, res) {
     try {
-      const category = await Category.create(req.body);
-      return res.status(200).json({
-        message: "Create category done",
+      const slug = slugify(req.body.name, { lower: true, strict: true });
+
+      const existingCategory = await Category.findOne({ slug });
+      if (existingCategory) {
+        return res.status(400).json({
+          message:
+            "Category name already exists, please choose a different name",
+        });
+      }
+
+      const category = await Category.create({ ...req.body, slug });
+      return res.status(201).json({
+        message: "Create category successful",
         data: category,
       });
     } catch (error) {
@@ -55,9 +65,9 @@ class CategoryController {
       const slug = slugify(req.body.name, { lower: true, strict: true });
 
       const category = await Category.findOneAndUpdate(
-        { slug: req.params.slug }, 
-        { ...req.body, slug }, 
-        { new: true } 
+        { slug: req.params.slug },
+        { ...req.body, slug },
+        { new: true }
       );
 
       if (!category) {
@@ -80,14 +90,16 @@ class CategoryController {
 
   async deleteCategory(req, res) {
     try {
-      const category = await Category.findByIdAndDelete(req.params.id);
+      const category = await Category.findOneAndDelete({
+        slug: req.params.slug,
+      });
       if (!category) {
         return res.status(404).json({
           message: "Category not found",
         });
       }
       return res.status(200).json({
-        message: "Category deleted done",
+        message: "Category deleted successfully",
       });
     } catch (error) {
       return res.status(400).json({

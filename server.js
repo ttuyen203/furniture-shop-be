@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import categoryRoute from "./src/routes/categoryRoute.js";
 import productRoute from "./src/routes/productRoute.js";
 import userRoute from "./src/routes/userRoute.js";
+import cartRoute from "./src/routes/cartRoute.js";
 
 const app = express();
 
@@ -23,6 +24,8 @@ app.use(categoryRoute);
 app.use(productRoute);
 
 app.use(userRoute);
+
+app.use(cartRoute);
 
 dotenv.config();
 

@@ -35,6 +35,9 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
+    totalAmount: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

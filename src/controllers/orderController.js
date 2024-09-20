@@ -6,7 +6,7 @@ class OrderController {
     try {
       const orders = await Order.find();
       return res.status(200).json({
-        message: "Lấy tất cả đơn hàng thành công",
+        message: "Get all order",
         data: orders,
       });
     } catch (error) {
@@ -24,9 +24,25 @@ class OrderController {
         return res.status(404).json({ message: "Order Not Found" });
       }
       return res.status(200).json({
-        message: "Lấy chi tiết đơn hàng thành công",
+        message: "Get detail order",
         data: order,
       });
+    } catch (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+  }
+
+  async getOrderUser(req, res) {
+    try {
+      const order = await Order.find({ user: req.params.id });
+
+      if (!order) {
+        return res.status(404).json({ message: "Order Not Found" });
+      }
+
+      res.status(200).json(order);
     } catch (error) {
       return res.status(400).json({
         message: error.message,

@@ -110,6 +110,112 @@ class OrderController {
       });
     }
   }
+
+  async confirmOrder(req, res) {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return res.status(404).json({ message: "Order Not Found" });
+      }
+
+      if (order.status !== "Pending") {
+        return res.status(400).json({ message: "Order cannot be confirmed" });
+      }
+
+      order.status = "Confirmed";
+      await order.save();
+
+      res.status(200).json({
+        message: "Order confirmed successfully",
+        data: order,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+  }
+
+  async shipOrder(req, res) {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+
+      if (order.status !== "Confirmed") {
+        return res.status(400).json({ message: "Order cannot be shipped" });
+      }
+
+      order.status = "Shipping";
+      await order.save();
+
+      res.status(200).json({
+        message: "Order is being shipped",
+        data: order,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+  }
+
+  async deliverOrder(req, res) {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+
+      if (order.status !== "Shipping") {
+        return res
+          .status(400)
+          .json({ message: "Order cannot be marked as delivered" });
+      }
+
+      order.status = "Delivered";
+      await order.save();
+
+      res.status(200).json({
+        message: "Order delivered successfully",
+        data: order,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+  }
+
+  async cancelOrder(req, res) {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+
+      if (order.status === "Shipping" || order.status === "Delivered") {
+        return res.status(400).json({ message: "Order cannot be cancelled" });
+      }
+
+      order.status = "Cancelled";
+      await order.save();
+
+      res.status(200).json({
+        message: "Order cancelled successfully",
+        data: order,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+  }
 }
 
 export default OrderController;

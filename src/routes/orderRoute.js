@@ -11,4 +11,9 @@ router.post("/orders", orderController.createOrder);
 router.put("/orders/:id", orderController.updateOrder);
 router.delete("/orders/:id", orderController.deleteOrder);
 
+router.put("/orders/:id/confirm", orderController.confirmOrder);
+router.put("/orders/:id/ship", orderController.shipOrder);
+router.put("/orders/:id/deliver", orderController.deliverOrder);
+router.put("/orders/:id/cancel", orderController.cancelOrder);
+
 export default router;

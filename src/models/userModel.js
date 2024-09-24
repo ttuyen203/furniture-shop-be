@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    phone: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
   },
   { timestamps: true, versionKey: false }
 );

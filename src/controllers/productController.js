@@ -49,7 +49,7 @@ class ProductController {
         });
       }
 
-      const images = req.body.images || [];
+      const images = req.body.images || "";
 
       const product = await Product.create({ ...req.body, slug, images });
       return res.status(201).json({

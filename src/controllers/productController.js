@@ -72,7 +72,7 @@ class ProductController {
 
       const existingProduct = await Product.findOne({
         slug: slug,
-        // _id: { $ne: req.params.id }, // Trừ id món ăn hiện tại để tránh lỗi
+        _id: { $ne: req.params.id }, // Trừ id món ăn hiện tại để tránh lỗi
       });
 
       if (existingProduct) {

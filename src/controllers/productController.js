@@ -71,8 +71,8 @@ class ProductController {
       const slug = slugify(req.body.name, { lower: true, strict: true });
 
       const existingProduct = await Product.findOne({
-        slug: slug,
-        _id: { $ne: req.params.id }, // Trừ id món ăn hiện tại để tránh lỗi
+        name: req.body.name,
+        slug: { $ne: req.params.slug }, // Trừ slug sản phẩm hiện tại để tránh lỗi
       });
 
       if (existingProduct) {

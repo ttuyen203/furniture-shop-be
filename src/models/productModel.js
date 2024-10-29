@@ -31,7 +31,12 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    images: { type: String, default: "" },
+    images: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
   },
   { timestamps: true, versionKey: false }
 );

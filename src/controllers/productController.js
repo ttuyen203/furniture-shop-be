@@ -49,7 +49,9 @@ class ProductController {
         });
       }
 
-      const images = req.body.images || "";
+      const images = req.files
+        ? req.files.map((file) => file.path)
+        : req.body.images;
 
       const product = await Product.create({ ...req.body, slug, images });
       return res.status(201).json({
@@ -68,25 +70,42 @@ class ProductController {
     try {
       const slug = slugify(req.body.name, { lower: true, strict: true });
 
-      const product = await Product.findOneAndUpdate(
-        { slug: req.params.slug },
-        { ...req.body, slug },
-        { new: true }
-      );
+      const existingProduct = await Product.findOne({
+        slug: slug,
+        // _id: { $ne: req.params.id }, // Trừ id món ăn hiện tại để tránh lỗi
+      });
 
-      if (!product) {
-        return res.status(404).json({
-          message: "Product not found",
+      if (existingProduct) {
+        return res.status(400).json({
+          message: "The product name already exists",
         });
       }
 
-      return res.status(200).json({
-        message: "Product updated successfully",
+      const images = req.files
+        ? req.files.map((file) => file.path)
+        : req.body.images;
+
+      const updateData = {
+        ...req.body,
+        slug: slug,
+        images,
+      };
+
+      const product = await Product.findOneAndUpdate(
+        { slug: req.params.slug },
+        updateData,
+        {
+          new: true,
+        }
+      );
+
+      return res.status(201).json({
+        message: "Update product successful",
         data: product,
       });
     } catch (error) {
-      return res.status(400).json({
-        message: "Update product failed",
+      return res.status(500).json({
+        message: "Update dish failed",
         error: error.message,
       });
     }
